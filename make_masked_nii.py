@@ -6,7 +6,7 @@ from skimage.segmentation import find_boundaries
 from scipy.ndimage import binary_fill_holes, binary_erosion, binary_dilation
 
 
-filename = 'study_008.nii'
+filename = 'study_001.nii'
 # 加载NII数据
 nii_data = nib.load('Data/'+filename)
 ct_data = nii_data.get_fdata()
@@ -39,13 +39,6 @@ for i in range(num_slices):
     # 将聚类标签重塑回二维形状
     clustered_slice_data = labels.reshape(normalized_slice_data.shape)
 
-    # 查看聚类簇的索引范围
-    min_index = np.min(labels)
-    max_index = np.max(labels)
-
-    # 查看唯一的聚类标签
-    unique_labels = np.unique(labels)
-
     # 过滤标签不为1的像素
     filtered_slice_data = np.where(clustered_slice_data == 2, 0, clustered_slice_data)
 
@@ -66,6 +59,9 @@ for i in range(num_slices):
     # 腐蚀操作
     eroded_image = binary_erosion(filtered_lung_data)
 
+    eroded_image = binary_erosion(eroded_image)
+
+
     # 膨胀操作
     dilated_image = binary_dilation(eroded_image)
 
@@ -77,7 +73,7 @@ for i in range(num_slices):
     # 将处理后的切片保存到新的数据集中
     processed_ct_data[:, :, i] = masked_image
 
-    print("Processed", i+1, "slice.")
+    print(filename, "processed", i+1, "slice.")
 
 
 
