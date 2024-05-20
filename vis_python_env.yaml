@@ -62,6 +62,7 @@ dependencies:
       - six==1.16.0
       - threadpoolctl==3.5.0
       - tifffile==2024.5.10
+      - tqdm==4.66.4
       - trame==3.6.0
       - trame-client==3.0.3
       - trame-server==3.0.0

@@ -35,3 +35,7 @@ server/node_modules
 
 # 忽略病人CT图片文件
 patient*/
+
+/Processed_Data
+
+/__pycache__
