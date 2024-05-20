@@ -32,3 +32,6 @@ yarn-error.log*
 server/node_modules
 
 /.vscode
+
+# 忽略病人CT图片文件
+patient*/
