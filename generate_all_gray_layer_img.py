@@ -2,9 +2,9 @@ import nibabel as nib
 import matplotlib.pyplot as plt
 import os
 
-def generate_all_gray_layer_img(patient_index):
-    filename = f'processed_study_00{patient_index}.nii'
-    dirname = f'Processed_Data/gray_image/patient_gray_{patient_index}'
+def generate_all_gray_layer_img(nii_file):
+    filename = f'processed_{nii_file}.nii'
+    dirname = f'Processed_Data/gray_image/gray_{nii_file}'
     os.makedirs(dirname, exist_ok=True)
     # 加载NII数据
     nii_data = nib.load('Processed_Data/nii_files/'+filename)
@@ -19,4 +19,9 @@ def generate_all_gray_layer_img(patient_index):
         plt.savefig(f'{dirname}/layer{layer_index+1}.jpg', bbox_inches='tight')
         print(f'{filename} processed gray layer {layer_index}.')
 
-    print(f"Finish saving No.{patient_index} patient gray img file.")
+    print(f"Finish saving {nii_file} patient gray img file.")
+
+
+if __name__=="__main__":
+    nii_file = 'study_001'
+    generate_all_gray_layer_img(nii_file)

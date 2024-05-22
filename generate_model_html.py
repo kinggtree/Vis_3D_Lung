@@ -5,10 +5,10 @@ import pyvista as pv
 from skimage import measure
 
 
-def generate_model_html(index):
-    print(f'Generating No.{index} patient 3D model...')
+def generate_model_html(nii_file):
+    print(f'Generating {nii_file} patient 3D model...')
     # 加载nii数据
-    ct_image = nib.load(f'Processed_Data/nii_files/processed_study_00{index}.nii')
+    ct_image = nib.load(f'Processed_Data/nii_files/processed_{nii_file}.nii')
     ct_data = ct_image.get_fdata()
 
     # 定义阈值，通常肺部区域的像素值较低
@@ -54,5 +54,10 @@ def generate_model_html(index):
     plotter.add_mesh(lung_grid, color='white', opacity=0.5)
     # plotter.add_axes()
 
-    plotter.export_html(f'Processed_Data/3D_model/3d_model_{index}.html')
-    print(f'Finish generating No.{index} 3D model.')
+    plotter.export_html(f'Processed_Data/3D_model/3d_model_{nii_file}.html')
+    print(f'Finish generating {nii_file} 3D model.')
+
+
+if __name__=="__main__":
+    nii_file = 'study_001'
+    generate_model_html(nii_file)

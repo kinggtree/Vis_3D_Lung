@@ -1,3 +1,4 @@
+from multiprocessing import Pool
 from generate_all_gray_layer_img import generate_all_gray_layer_img
 from generate_all_kmeans_layer_img import generate_all_kmeans_layer_img
 from generate_all_spilted_nii import generate_all_spilted_nii
@@ -34,21 +35,20 @@ for folder in folders:
 folder_path = 'Data'
 nii_files = get_nii_files(folder_path)
 
-remaining_files = len(nii_files)
-total_estimated_time = 0
-
-for nii_file in tqdm(nii_files, desc="Processing", unit="file"):
+def process_file(nii_file):
     current_index = get_last_character(nii_file)
     start_time = time.time()
     generate_all_spilted_nii(nii_file)
-    generate_all_gray_layer_img(current_index)
-    generate_all_kmeans_layer_img(current_index)
-    generate_model_html(current_index)
+    generate_all_gray_layer_img(nii_file[:-4])
+    generate_all_kmeans_layer_img(nii_file[:-4])
+    generate_model_html(nii_file[:-4])
     end_time = time.time()
     elapsed_time = end_time - start_time
-    total_estimated_time += elapsed_time * remaining_files
-    remaining_files -= 1
     print(f"Finish processing patient No.{current_index}. Time elapsed: {elapsed_time:.2f} seconds.")
-    print(f"Estimated time remaining: {total_estimated_time:.2f} seconds.")
-    
+    return elapsed_time
+
+with Pool(processes=len(nii_files)) as pool:
+    elapsed_times = list(tqdm(pool.imap(process_file, nii_files), total=len(nii_files), desc="Processing", unit="file"))
+
+
 print('Finish processing all files!')

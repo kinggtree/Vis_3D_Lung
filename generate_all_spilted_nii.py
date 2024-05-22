@@ -81,3 +81,7 @@ def generate_all_spilted_nii(filename):
 
     print(f"Finish spilting {filename}!")
 
+
+if __name__=="__main__":
+    filename = 'study_001.nii'
+    generate_all_spilted_nii(filename)
