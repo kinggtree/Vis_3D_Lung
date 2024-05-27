@@ -3,10 +3,11 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const asyncfs = require('fs').promises;
 
 const app = express();
 const PORT = 5000;
+
+let model_path = '../3d_model.html';
 
 
 function getNiiFileNames(directory) {
@@ -72,19 +73,6 @@ function getLayerNames(personFileName) {
 
 
 
-
-async function overwriteModel(sourcePath, targetPath) {
-  try {
-    const data = await asyncfs.readFile(sourcePath);
-    await asyncfs.writeFile(targetPath, data);
-    return 0;  // 成功返回0
-  } catch (err) {
-    console.error("Error occurred:", err);
-    return -1; // 错误返回-1
-  }
-}
-
-
 // 设置 CSP 头，允许内联脚本
 app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline'; img-src *");
@@ -120,19 +108,10 @@ app.get('/api/refreshHtmlFile', async (req, res) => {
     return;
   }
 
-  const sourcePath = path.join(__dirname, '../Processed_Data/3D_model', `3d_model_${personName}.html`);
-  const targetPath = path.join(__dirname, '../3d_model.html');
+  model_path = path.join('../Processed_Data/3D_model', `3d_model_${personName}.html`);
 
-  try {
-    const refreshStatus = await overwriteModel(sourcePath, targetPath);
-    if (refreshStatus == -1) {
-      res.status(500).send('Failed to refresh the HTML file.');
-    } else {
-      res.send('Refresh Complete!');
-    }
-  } catch (error) {
-    res.status(500).send('An error occurred during the operation.');
-  }
+  // 返回更新后的 model_path
+  res.send({ modelPath: model_path });
 });
 
 
@@ -142,7 +121,7 @@ app.get('/api/htmlModel', (req, res) => {
   res.set('Content-Type', 'text/html');
 
   // 返回 HTML 文件
-  res.sendFile(path.join(__dirname, '../3d_model.html'));
+  res.sendFile(path.join(__dirname, `${model_path}`));
 });
 
 

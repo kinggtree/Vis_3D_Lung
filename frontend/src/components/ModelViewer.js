@@ -125,45 +125,45 @@ function ModelViewer() {
 
 
   return (
-    <Grid container spacing={2} style={{ height: '100vh' }}>
-      <Grid item xs={2}>
-        <Select value={selectedPersonName} onChange={handlePersonSelectChange}>
+    <Grid container spacing={2}>
+      <Grid item xs={2} container direction="column" className='option-container'>
+        <Select value={selectedPersonName} onChange={handlePersonSelectChange} className='option'>
           {personListItems.map(item => (
             <MenuItem key={item} value={item}>{item}</MenuItem>
           ))}
         </Select>
-        <Button variant="contained" color="primary" onClick={refreshNewPerson}>
+        <Button variant="contained" color="primary" onClick={refreshNewPerson} className='button'>
           Reload Person
         </Button>
-        <Select value={selectedLayerName} onChange={handleLayerSelectChange}>
+        <Select value={selectedLayerName} onChange={handleLayerSelectChange} className='option'>
           {layerListItems.map(item => (
             <MenuItem key={item} value={item}>{item}</MenuItem>
           ))}
         </Select>
         {/* 重新加载按钮 */}
-        <Button variant="contained" color="primary" onClick={refreshNewLayer}>
+        <Button variant="contained" color="primary" onClick={refreshNewLayer} className='button'>
           Reload Layer
         </Button>
       </Grid>
+
+      {/* 使用 iframe 内嵌 HTML 文件 */}
       <Grid item xs={5}>
-        <Paper elevation={3} style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {/* 使用 iframe 内嵌 HTML 文件 */}
+        <Paper elevation={3} className='model-container'>
           <iframe key={iframeKey} src="http://localhost:5000/api/htmlModel" title="Model Viewer" style={{ width: '100%', height: '100%', border: 'none' }}></iframe>
         </Paper>
       </Grid>
+
+      {/* 渲染图片 */}
       <Grid item xs={5}>
-        <Grid container spacing={2} className="image-container"> {/* 使用 className 添加样式 */}
+        <Grid container spacing={2} className="image-container"> 
           <Grid item xs={12} direction="column" spacing={2}>
-            <Paper elevation={3} className="image-container"> {/* 使用 className 添加样式 */}
-              {/* 渲染图片 */}
+            <Paper elevation={3} className="image-container"> 
               <img src={grayImage} alt="Gray Image" />
             </Paper>
-            <Paper elevation={3} className="image-container"> {/* 使用 className 添加样式 */}
-              {/* 渲染图片 */}
+            <Paper elevation={3} className="image-container"> 
               <img src={kmeansImage} alt="Kmeans Image" />
             </Paper>
           </Grid>
-          {/* 这里可以继续添加其他 Grid item */}
         </Grid>
       </Grid>
     </Grid>
