@@ -39,3 +39,5 @@ patient*/
 /Processed_Data
 
 /__pycache__
+
+/nii_mask_files_backup

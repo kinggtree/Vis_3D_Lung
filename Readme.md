@@ -9,6 +9,7 @@
 - **nii数据处理**：
   - nii数据读取：使用nibabel库
   - nii数据3D可视化：利用PyVista库
+  - 肺部分割：nnUNet
 
 - **前后端实现**：
   - 前端：采用React框架
@@ -45,23 +46,12 @@
 
 #### 分割肺部区域
 
-1. **数据预处理**：
-   - 读取nii数据，对单层进行K-Means聚类。
-   
-2. **肺部区域提取**：
-   - 使用图形学方法进行两次腐蚀后膨胀操作，得到肺部区域Mask。
-   
-3. **纯肺部图像生成**：
-   - 将Mask和原图像进行AND操作，获取纯肺部图像。
-   
-4. **批量处理**：
-   - 对全部layer实施以上操作，将数据重新保存到processed_study_00x.nii中。
+该部分使用nnUNet（v1）和一个预训练的模型（见[此GitHub链接](https://github.com/JunMa11/COVID-19-CT-Seg-Benchmark)）来生成。
+
+如何生成，以及生成后的具体细节待完善。
 
 相关文件：
-- make_mask.ipynb
-- make_masked_nii.py
-- make_fat_mask_nii.py
-- make_fat_mask.ipynb
+- 待完善
 
 #### 3D显示
 
@@ -75,8 +65,7 @@
    - 使用pv.Plotter进行展示。
 
 相关文件：
-- 3D_plotmap.py
-- 3D_plotmap_smooth.py
+- generate_model_html.py
 
 #### 可视化以及交互
 
@@ -84,13 +73,9 @@
    - 使用React构建前端交互界面，利用Express.js负责后端响应以及调用python文件，获取Model的html和CT图像。
 
 相关文件：
-- generate_model_html.py
-- ...（其他相关文件）
+- 待完善
 
 ### 文件详解
-
-- **2D_layer.ipynb**：
-  - 用于2D显示，测试原数据并简单实验算法。
   
 - **Trash文件夹**：
   - 包含废弃的文件，如废弃的算法和其他功能实现方法。

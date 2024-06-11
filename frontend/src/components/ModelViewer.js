@@ -5,7 +5,7 @@ import './styles.css'; // 引入 CSS 文件
 
 function ModelViewer() {
   const [grayImage, setGrayImage] = useState('');
-  const [kmeansImage, setKmeansImage] = useState('');
+  const [maskedImage, setMaskedImage] = useState('');
   const [selectedPersonName, setSelectedPersonName] = useState('');
   const [selectedLayerName, setSelectedLayerName] = useState('');
   const [personListItems, setPersonListItems] = useState([]);
@@ -18,7 +18,7 @@ function ModelViewer() {
   useEffect(() => {
     // 获取第一张图片
     apiGetGrayImage();
-    apiGetKmeansImage();
+    apiGetMaskedImage();
 
     
     apiGetPersonList();
@@ -73,8 +73,8 @@ function ModelViewer() {
   };
 
   // 获取gray CT图，传入的index为层数编号
-  const apiGetKmeansImage = () => {
-    axios.get('/api/getKmeansImage', {
+  const apiGetMaskedImage = () => {
+    axios.get('/api/getMaskedImage', {
       params: {
         layerName: selectedLayerName,
         personName: selectedPersonName
@@ -83,7 +83,7 @@ function ModelViewer() {
     })
     .then(response => {
       const imageUrl = URL.createObjectURL(response.data);
-      setKmeansImage(imageUrl);
+      setMaskedImage(imageUrl);
     })
     .catch(error => {
       console.error('Error fetching first image:', error);
@@ -109,7 +109,7 @@ function ModelViewer() {
   // 刷新病人图层
   const refreshNewLayer = () => {
     apiGetGrayImage();
-    apiGetKmeansImage();
+    apiGetMaskedImage();
   };
 
   // 处理病人框下拉选择框变化
@@ -161,7 +161,7 @@ function ModelViewer() {
               <img src={grayImage} alt="Gray Image" />
             </Paper>
             <Paper elevation={3} className="image-container"> 
-              <img src={kmeansImage} alt="Kmeans Image" />
+              <img src={maskedImage} alt="Masked Image" />
             </Paper>
           </Grid>
         </Grid>

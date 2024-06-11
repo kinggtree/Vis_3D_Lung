@@ -38,20 +38,20 @@ function getNiiFileNames(directory) {
 
 function getLayerNames(personFileName) {
   const grayImgPath = path.join('../Processed_Data/gray_image', `gray_${personFileName}`);
-  const kmeansImgPath = path.join('../Processed_Data/kmeans_image', `kmeans_${personFileName}`);
+  const maskedImgPath = path.join('../Processed_Data/masked_img', `masked_${personFileName}`);
   const grayItems = fs.readdirSync(grayImgPath);
-  const kmeansItems = fs.readdirSync(kmeansImgPath);
+  const maskedItems = fs.readdirSync(maskedImgPath);
 
   let shorterArray;
   let shorterArrayDir;
   
   // 比较两个数组的长度，找到较短的那一个
-  if (grayItems.length <= kmeansItems.length) {
+  if (grayItems.length <= maskedItems.length) {
     shorterArray = grayItems;
     shorterArrayDir = grayImgPath;
   } else {
-    shorterArray = kmeansItems;
-    shorterArrayDir = kmeansImgPath;
+    shorterArray = maskedItems;
+    shorterArrayDir = maskedImgPath;
   }
 
   const layerNames = [];
@@ -146,10 +146,10 @@ app.get('/api/getGrayImage', (req, res) => {
 });
 
 
-// 获取kmeans图片
-app.get('/api/getKmeansImage', (req, res) => {
+// 获取masked图片
+app.get('/api/getMaskedImage', (req, res) => {
   const layerName = req.query.layerName;
-  const personName = req.query.personName
+  const personName = req.query.personName;
   let imagePath = ''
 
   if (layerName == '')
@@ -158,8 +158,8 @@ app.get('/api/getKmeansImage', (req, res) => {
     imagePath = `testimg${1}.png`;
   }
   else {
-    imagePath = `Processed_Data/kmeans_image/kmeans_${personName}/${layerName}.jpg`;
-    console.log(`received ${layerName} at getKmeansImage api`);
+    imagePath = `Processed_Data/masked_img/masked_${personName}/${layerName}.jpg`;
+    console.log(`received ${layerName} at getMaskedImage api`);
   }
 
   // 返回图片文件
