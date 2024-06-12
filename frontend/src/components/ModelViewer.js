@@ -12,10 +12,18 @@ function ModelViewer() {
   const [layerListItems, setLayerListItems] = useState([]);
   const [lesionsLayerListItems, setLesionsLayerListItems] = useState([]);
   const [iframeKey, setIframeKey] = useState(0); // 用于重新加载 iframe 内容的 key
+  const [iframeSrc, setIframeSrc] = useState('');
 
 
 
   useEffect(() => {
+    // 获取当前页面的主机名和端口号
+    const hostname = window.location.hostname;
+    const port = '5000'; // 后端端口号 5000
+
+    setIframeSrc(`http://${hostname}:${port}/api/htmlModel`);
+
+
     // 获取第一张图片
     apiGetGrayImage();
     apiGetMaskedImage();
@@ -136,6 +144,8 @@ function ModelViewer() {
     setSelectedLayerName(event.target.value);
   };
 
+  
+
 
 
   return (
@@ -174,7 +184,7 @@ function ModelViewer() {
       {/* 使用 iframe 内嵌 HTML 文件 */}
       <Grid item xs={5}>
         <Paper elevation={3} className='model-container'>
-          <iframe key={iframeKey} src="http://localhost:5000/api/htmlModel" title="Model Viewer" style={{ width: '100%', height: '100%', border: 'none' }}></iframe>
+          <iframe key={iframeKey} src={iframeSrc} title="Model Viewer" style={{ width: '100%', height: '100%', border: 'none' }}></iframe>
         </Paper>
       </Grid>
 
