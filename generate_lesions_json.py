@@ -5,7 +5,10 @@ import os
 
 def generate_lesions_json(nii_file):
     # 加载NII数据
-    mask_img = nib.load('Processed_Data/3d_nii_mask_files/' + nii_file)
+    # mask_img = nib.load('Processed_Data/3d_nii_mask_files/' + nii_file)
+    # 使用2d数据
+    mask_img = nib.load('Processed_Data/2d_nii_mask_files/' + nii_file)
+
     mask_data = mask_img.get_fdata()
 
     dirname = 'Processed_Data/lesions_json'
