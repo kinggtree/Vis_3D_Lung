@@ -72,6 +72,29 @@ function getLayerNames(personFileName) {
 };
 
 
+function getLesionsLayerNames(personFileName) {
+  const lesionsJsonPath = path.join('../Processed_Data/lesions_json', `lesions_${personFileName}.json`);
+
+  // 读取JSON文件
+  const lesionsJson = JSON.parse(fs.readFileSync(lesionsJsonPath, 'utf8'));
+
+  // 获取所有层
+  const layers = lesionsJson.lesions_slices;
+
+  // 将所有层的数字前面加上layer字母，并保存到一个数组中
+  const layerNames = layers.map(layer => `layer${layer}`);
+
+  // 目录中所有存在的层文件
+  const existingLayerNames = getLayerNames(personFileName);
+
+  // 过滤layerNames数组中的元素，使得最终的validLayerNames数组只包含那些在existingLayerNames数组中也存在的元素
+  const validLayerNames = layerNames.filter(layerName => existingLayerNames.includes(layerName));
+
+  // 返回处理后的层
+  return validLayerNames;
+
+}
+
 
 // 设置 CSP 头，允许内联脚本
 app.use((req, res, next) => {
@@ -99,6 +122,17 @@ app.get('/api/getLayerList', (req, res) => {
     return numberA - numberB; // 按数字排序
   }));
 });
+
+
+app.get('/api/getLesionsLayerList', (req, res) => {
+  const fileName = req.query.personFileName;
+  const lesionsLayerNameList = getLesionsLayerNames(fileName);
+  res.send(lesionsLayerNameList.sort(function(a, b) {
+    const numberA = parseInt(a.substring(5)); // 提取数字部分
+    const numberB = parseInt(b.substring(5));
+    return numberA - numberB; // 按数字排序
+  }));
+})
 
 
 app.get('/api/refreshHtmlFile', async (req, res) => {

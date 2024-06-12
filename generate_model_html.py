@@ -3,6 +3,18 @@ import numpy as np
 import scipy.ndimage as ndi
 import pyvista as pv
 from skimage import measure
+import json
+
+
+def read_lesions_json(json_file_path):
+    # 打开并读取JSON文件
+    with open(json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # 提取病灶层数信息
+    lesions_slices = data.get('lesions_slices', [])
+
+    return lesions_slices
 
 # 将3D numpy数组转换为pyvista的UnstructuredGrid对象，添加层间距离，并增加Marching Cubes的Level
 
@@ -37,13 +49,25 @@ def numpy_to_pyvista(vol, slice_spacing=1.0, level=-300, reduce_factor=2):
 
 def generate_model_html(nii_file):
     print(f'Generating {nii_file} patient 3D model...')
-    # 加载原始nii数据
-    ct_image = nib.load('Data/'+nii_file)
-    ct_data = ct_image.get_fdata()
+    # 读取CT图像
+    ct_img = nib.load('Data/' + nii_file)
+    ct_data = ct_img.get_fdata()
 
-    # 加载mask nii数据
-    mask_image = nib.load('Processed_Data/nii_mask_files/'+nii_file)
-    mask_data = mask_image.get_fdata()
+    # 读取肺部区域掩码和病灶区域掩码
+    lung_mask_img = nib.load('Processed_Data/2d_nii_mask_files/' + nii_file)
+    lesions_mask_img = nib.load('Processed_Data/3d_nii_mask_files/' + nii_file)
+    lung_mask_data = lung_mask_img.get_fdata()
+    lesions_mask_data = lesions_mask_img.get_fdata()
+
+    # 读取病灶层数信息
+    lesions_slices = read_lesions_json(f'Processed_Data/lesions_json/lesions_{nii_file[:-4]}.json')
+
+    # 创建叠加后的掩码
+    mask_data = np.copy(lung_mask_data)
+
+    # 将病灶掩码中的label为3的部分叠加到肺部掩码中
+    for slice_idx in lesions_slices:
+        mask_data[:, :, slice_idx][lesions_mask_data[:, :, slice_idx] == 3] = 3
 
     # 肺部区域
     lung_mask = np.zeros_like(mask_data)

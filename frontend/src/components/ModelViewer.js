@@ -10,8 +10,8 @@ function ModelViewer() {
   const [selectedLayerName, setSelectedLayerName] = useState('');
   const [personListItems, setPersonListItems] = useState([]);
   const [layerListItems, setLayerListItems] = useState([]);
+  const [lesionsLayerListItems, setLesionsLayerListItems] = useState([]);
   const [iframeKey, setIframeKey] = useState(0); // 用于重新加载 iframe 内容的 key
-
 
 
 
@@ -41,6 +41,7 @@ function ModelViewer() {
 
   // 获取CT层列表
   const apiGetLayerList = (personFileName) => {
+    // 获取所有层列表
     axios.get('/api/getLayerList', {
       params: {
         personFileName: personFileName
@@ -48,6 +49,19 @@ function ModelViewer() {
     })
     .then(response => {
       setLayerListItems(response.data);
+    })
+    .catch(error => {
+      console.error('Error fetching list items:', error);
+    });
+
+    // 获取病灶层列表
+    axios.get('/api/getLesionsLayerList', {
+      params: {
+        personFileName: personFileName
+      }
+    })
+    .then(response => {
+      setLesionsLayerListItems(response.data);
     })
     .catch(error => {
       console.error('Error fetching list items:', error);
@@ -135,6 +149,7 @@ function ModelViewer() {
         <Button variant="contained" color="primary" onClick={refreshNewPerson} className='button'>
           Reload Person
         </Button>
+        {/* 所有层 */}
         <Select value={selectedLayerName} onChange={handleLayerSelectChange} className='option'>
           {layerListItems.map(item => (
             <MenuItem key={item} value={item}>{item}</MenuItem>
@@ -143,6 +158,16 @@ function ModelViewer() {
         {/* 重新加载按钮 */}
         <Button variant="contained" color="primary" onClick={refreshNewLayer} className='button'>
           Reload Layer
+        </Button>
+        {/* 病灶层 */}
+        <Select value={selectedLayerName} onChange={handleLayerSelectChange} className='option'>
+          {lesionsLayerListItems.map(item => (
+            <MenuItem key={item} value={item}>{item}</MenuItem>
+          ))}
+        </Select>
+        {/* 重新加载按钮 */}
+        <Button variant="contained" color="primary" onClick={refreshNewLayer} className='button'>
+          Reload Lesions Layer
         </Button>
       </Grid>
 

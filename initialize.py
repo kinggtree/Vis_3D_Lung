@@ -6,6 +6,7 @@ from tqdm import tqdm
 import time
 from generate_gray_img import generate_gray_img
 from generate_masked_img import generate_masked_img
+from generate_lesions_json import generate_lesions_json
 
 def get_last_character(file_path):
     filename = os.path.basename(file_path)
@@ -22,7 +23,6 @@ def get_nii_files(folder_path):
 
 folders = [
     'Processed_Data',
-    'Processed_Data/nii_mask_files',
     'Processed_Data/3D_model',
     'Processed_Data/masked_img',
     'Processed_Data/gray_image'
@@ -44,6 +44,9 @@ def process_file(nii_file):
     start_time = time.time()
 
     # 添加使用nnUNet来提取mask的部分
+
+    # 生成病灶层指示json
+    generate_lesions_json(nii_file)
 
     generate_gray_img(nii_file)
     generate_masked_img(nii_file)
