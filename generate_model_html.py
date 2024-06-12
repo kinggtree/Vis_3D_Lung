@@ -55,19 +55,20 @@ def generate_model_html(nii_file):
 
     # 读取肺部区域掩码和病灶区域掩码
     lung_mask_img = nib.load('Processed_Data/2d_nii_mask_files/' + nii_file)
-    lesions_mask_img = nib.load('Processed_Data/3d_nii_mask_files/' + nii_file)
-    lung_mask_data = lung_mask_img.get_fdata()
-    lesions_mask_data = lesions_mask_img.get_fdata()
+    # lesions_mask_img = nib.load('Processed_Data/3d_nii_mask_files/' + nii_file)
+    # lung_mask_data = lung_mask_img.get_fdata()
+    # lesions_mask_data = lesions_mask_img.get_fdata()
 
-    # 读取病灶层数信息
-    lesions_slices = read_lesions_json(f'Processed_Data/lesions_json/lesions_{nii_file[:-4]}.json')
+    # # 读取病灶层数信息
+    # lesions_slices = read_lesions_json(f'Processed_Data/lesions_json/lesions_{nii_file[:-4]}.json')
 
-    # 创建叠加后的掩码
-    mask_data = np.copy(lung_mask_data)
+    # # 创建叠加后的掩码
+    # mask_data = np.copy(lung_mask_data)
 
-    # 将病灶掩码中的label为3的部分叠加到肺部掩码中
-    for slice_idx in lesions_slices:
-        mask_data[:, :, slice_idx][lesions_mask_data[:, :, slice_idx] == 3] = 3
+    # # 将病灶掩码中的label为3的部分叠加到肺部掩码中
+    # for slice_idx in lesions_slices:
+    #     mask_data[:, :, slice_idx][lesions_mask_data[:, :, slice_idx] == 3] = 3
+    mask_data = lung_mask_img.get_fdata()
 
     # 肺部区域
     lung_mask = np.zeros_like(mask_data)
