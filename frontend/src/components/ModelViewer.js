@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Grid, Box, useMediaQuery, useTheme } from '@mui/material';
+import { Grid } from '@mui/material';
 import SelectionControls from './SelectionControls';
 import ImageDisplay from './ImageDisplay';
 import IframeViewer from './IframeViewer';
@@ -21,9 +21,6 @@ function ModelViewer() {
   const [isImageLoading, setIsImageLoading] = useState(false); // 新增的图片加载状态
   const [isImageCleared, setIsImageCleared] = useState(false); // 新增的图片清除状态
   const [controlsKey, setControlsKey] = useState(0); // 用于强制刷新 SelectionControls
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     // 获取第一张图片

@@ -7,8 +7,25 @@ const fs = require('fs');
 const app = express();
 const PORT = 5000;
 
-let model_path = '../3d_model.html';
+const LOG_FILE_PATH = path.join(__dirname, '../access_log.txt');
 
+// 中间件来记录每个请求的IP地址、访问时间和访问网址
+app.use((req, res, next) => {
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const accessTime = new Date().toISOString();
+  const accessedUrl = req.originalUrl;
+  
+  const logEntry = `IP: ${clientIp}, Time: ${accessTime}, URL: ${accessedUrl}\n`;
+
+  // 将日志写入文件
+  fs.appendFile(LOG_FILE_PATH, logEntry, (err) => {
+    if (err) {
+      console.error('Error writing to log file', err);
+    }
+  });
+
+  next();
+});
 
 function getNiiFileNames(directory) {
   const niiFileNames = [];

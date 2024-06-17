@@ -41,3 +41,5 @@ patient*/
 /__pycache__
 
 /nii_mask_files_backup
+
+access_log.txt
