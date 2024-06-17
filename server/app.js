@@ -135,27 +135,31 @@ app.get('/api/getLesionsLayerList', (req, res) => {
 })
 
 
-app.get('/api/refreshHtmlFile', async (req, res) => {
+app.get('/api/refreshHtmlFile', (req, res) => {
   const personName = req.query.personName;
   if (!personName) {
     res.status(400).send('Missing personName parameter');
     return;
   }
 
-  model_path = path.join('../Processed_Data/3D_model', `3d_model_${personName}.html`);
+  const modelPath = path.join('../Processed_Data/3D_model', `3d_model_${personName}.html`);
 
-  // 返回更新后的 model_path
-  res.send({ modelPath: model_path });
+  // 返回更新后的 modelPath
+  res.send({ modelPath });
 });
 
-
-// 路由，用于提供HTML文件和图片资源的路径
 app.get('/api/htmlModel', (req, res) => {
+  const modelPath = req.query.modelPath;
+  if (!modelPath) {
+    res.status(400).send('Missing modelPath parameter');
+    return;
+  }
+
   // 设置响应头中的 Content-Type 字段为 text/html
   res.set('Content-Type', 'text/html');
 
   // 返回 HTML 文件
-  res.sendFile(path.join(__dirname, `${model_path}`));
+  res.sendFile(path.join(__dirname, modelPath));
 });
 
 
@@ -171,7 +175,6 @@ app.get('/api/getGrayImage', (req, res) => {
       imagePath = `testimg${0}.png`;
     }
     else {
-      console.log(`received ${layerName} at getGrayImage api`);
       imagePath = `Processed_Data/gray_image/gray_${personName}/${layerName}.jpg`;
     }
 
@@ -193,7 +196,6 @@ app.get('/api/getMaskedImage', (req, res) => {
   }
   else {
     imagePath = `Processed_Data/masked_img/masked_${personName}/${layerName}.jpg`;
-    console.log(`received ${layerName} at getMaskedImage api`);
   }
 
   // 返回图片文件

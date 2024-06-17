@@ -19,18 +19,13 @@ function ModelViewer() {
   const [isIframeLoading, setIsIframeLoading] = useState(true); // 用于跟踪 iframe 的加载状态
   const [isLoading, setIsLoading] = useState(false); // 新增的加载状态
   const [isImageLoading, setIsImageLoading] = useState(false); // 新增的图片加载状态
+  const [isImageCleared, setIsImageCleared] = useState(false); // 新增的图片清除状态
   const [controlsKey, setControlsKey] = useState(0); // 用于强制刷新 SelectionControls
 
   const theme = useTheme();
-  const imdobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    // 获取当前页面的主机名和端口号
-    const hostname = window.location.hostname;
-    const port = '5000'; // 后端端口号 5000
-
-    setIframeSrc(`http://${hostname}:${port}/api/htmlModel`);
-
     // 获取第一张图片
     apiGetGrayImage();
     apiGetMaskedImage();
@@ -39,6 +34,13 @@ function ModelViewer() {
 
     // 设置初始选项
     setSelectedPersonName('Select One');
+
+    // 设置模型目录的默认值
+    const hostname = window.location.hostname;
+    const port = '5000'; // 后端端口号 5000
+    const defaultModelPath = '../3d_model.html'; // 默认模型路径
+    setIframeSrc(`http://${hostname}:${port}/api/htmlModel?modelPath=${defaultModelPath}`);
+
   }, []);
 
   // 获取所有表单（用于初始化或者刷新病人）
@@ -104,6 +106,7 @@ function ModelViewer() {
         const imageUrl = URL.createObjectURL(response.data);
         setGrayImage(imageUrl);
         setIsImageLoading(false); // 图片加载完成
+        setIsImageCleared(false); // 图片加载完成，清除状态设为 false
       })
       .catch(error => {
         console.error('Error fetching first image:', error);
@@ -125,6 +128,7 @@ function ModelViewer() {
         const imageUrl = URL.createObjectURL(response.data);
         setMaskedImage(imageUrl);
         setIsImageLoading(false); // 图片加载完成
+        setIsImageCleared(false); // 图片加载完成，清除状态设为 false
       })
       .catch(error => {
         console.error('Error fetching first image:', error);
@@ -135,6 +139,9 @@ function ModelViewer() {
   // 重新获取选定病人所有信息
   const refreshNewPerson = () => {
     setSelectedLayerName(''); // 重置层数选择框的值
+    setGrayImage(''); // 清空灰度图像
+    setMaskedImage(''); // 清空掩码图像
+    setIsImageCleared(true); // 设置图片清除状态为 true
     setControlsKey(prevKey => prevKey + 1); // 更新状态以触发 SelectionControls 重新渲染
     apiGetLayerList(selectedPersonName);
     axios.get('/api/refreshHtmlFile', {
@@ -142,6 +149,10 @@ function ModelViewer() {
         personName: selectedPersonName
       }
     }).then(response => {
+      const newModelPath = response.data.modelPath;
+      const hostname = window.location.hostname;
+      const port = '5000'; // 后端端口号 5000
+      setIframeSrc(`http://${hostname}:${port}/api/htmlModel?modelPath=${newModelPath}`);
       setIframeKey(prevKey => prevKey + 1); // 更新状态以触发组件更新或重新渲染
       setIsIframeLoading(true); // 设置为加载中
     })
@@ -168,7 +179,7 @@ function ModelViewer() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item sm={12} md={3} container direction="column" className='option-container'>
+      <Grid item xs={12} sm={3} container direction="column" className='option-container'>
         <SelectionControls
           key={controlsKey} // 使用 key 来强制重新渲染
           personListItems={personListItems}
@@ -184,9 +195,9 @@ function ModelViewer() {
         />
       </Grid>
 
-      <Grid item sm={12} md={9}>
+      <Grid item xs={12} sm={9}>
         <Grid container spacing={2}>
-          <Grid item sm={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <IframeViewer
               iframeSrc={iframeSrc}
               iframeKey={iframeKey}
@@ -196,11 +207,12 @@ function ModelViewer() {
             />
           </Grid>
 
-          <Grid item sm={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <ImageDisplay
               grayImage={grayImage}
               maskedImage={maskedImage}
               isLoading={isImageLoading} // 传递图片加载状态
+              isImageCleared={isImageCleared} // 传递图片清除状态
             />
           </Grid>
         </Grid>

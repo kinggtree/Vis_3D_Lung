@@ -21,7 +21,7 @@ const SelectionControls = ({
       </Box>
     ) : (
       <>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom className='tipText'>
           请选择病人
         </Typography>
         <Select value={selectedPersonName} onChange={onPersonChange} className='option' fullWidth>
@@ -34,7 +34,7 @@ const SelectionControls = ({
         </Button>
         {layerListItems.length > 0 && (
           <Box mt={2}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom className='tipText'>
               请选择CT层
             </Typography>
             <Select value={selectedLayerName} onChange={onLayerChange} className='option' fullWidth>
@@ -48,13 +48,13 @@ const SelectionControls = ({
           </Box>
         )}
         {layerListItems.length > 0 && lesionsLayerListItems.length === 0 && (
-          <Typography variant="body2" color="textSecondary" mt={2}>
+          <Typography variant="body2" color="textSecondary" mt={2} className='tipText'>
             暂未发现病灶
           </Typography>
         )}
         {lesionsLayerListItems.length > 0 && (
           <Box mt={2}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom className='tipText'>
               请选择存在病灶的CT层
             </Typography>
             <Select value={selectedLayerName} onChange={onLayerChange} className='option' fullWidth>

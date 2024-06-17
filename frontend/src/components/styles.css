@@ -4,7 +4,7 @@
   background-color: #f0f0f0; /* 设置背景色 */
   border-radius: 10px; /* 添加圆角边框 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
-  margin-bottom: 20px; /* 底部边距 */
+  margin-bottom: 20px !important; /* 底部边距 */
 }
 
 .option {
@@ -43,7 +43,7 @@
   border: none;
 }
 
-.loading-container {
+.loading-container .textSecondary {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,4 +55,12 @@
   .option-container {
     padding: 8px;
   }
+}
+
+.tipText {
+  margin: 5px !important;
+}
+
+.button {
+  margin-bottom: 10px !important;
 }
