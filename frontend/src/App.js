@@ -1,10 +1,23 @@
-import React from 'react';
-import ModelViewer from './components/ModelViewer';
+import React, { useState, useEffect } from 'react';
+import MainComponent from './components/MainComponent';
+import WelcomeModal from './components/WelcomeModal';
 
 function App() {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  useEffect(() => {
+    setModalIsOpen(true);
+  }, []);
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+
   return (
     <div className="App">
-      <ModelViewer />
+      <WelcomeModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+      <MainComponent />
     </div>
   );
 }

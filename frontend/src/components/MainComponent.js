@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Grid } from '@mui/material';
+import { Grid, AppBar, Toolbar, Typography } from '@mui/material';
 import SelectionControls from './SelectionControls';
 import ImageDisplay from './ImageDisplay';
 import IframeViewer from './IframeViewer';
 import './styles.css'; // 引入 CSS 文件
 
-function ModelViewer() {
+function MainComponent() {
   const [grayImage, setGrayImage] = useState('');
   const [maskedImage, setMaskedImage] = useState('');
   const [selectedPersonName, setSelectedPersonName] = useState('');
@@ -176,7 +176,17 @@ function ModelViewer() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} sm={3} container direction="column" className='option-container'>
+      <Grid item container direction="column" className='toolbar'>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                CT建模及病灶展示
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Grid>
+
+      <Grid item xs={12} sm={3}>
         <SelectionControls
           key={controlsKey} // 使用 key 来强制重新渲染
           personListItems={personListItems}
@@ -192,30 +202,26 @@ function ModelViewer() {
         />
       </Grid>
 
-      <Grid item xs={12} sm={9}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <IframeViewer
-              iframeSrc={iframeSrc}
-              iframeKey={iframeKey}
-              isIframeLoading={isIframeLoading}
-              onLoad={() => setIsIframeLoading(false)}
-              onLoadStart={() => setIsIframeLoading(true)}
-            />
-          </Grid>
+      <Grid item xs={12} sm={5}>
+        <IframeViewer
+          iframeSrc={iframeSrc}
+          iframeKey={iframeKey}
+          isIframeLoading={isIframeLoading}
+          onLoad={() => setIsIframeLoading(false)}
+          onLoadStart={() => setIsIframeLoading(true)}
+        />
+      </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <ImageDisplay
-              grayImage={grayImage}
-              maskedImage={maskedImage}
-              isLoading={isImageLoading} // 传递图片加载状态
-              isImageCleared={isImageCleared} // 传递图片清除状态
-            />
-          </Grid>
-        </Grid>
+      <Grid item xs={12} sm={4}>
+        <ImageDisplay
+          grayImage={grayImage}
+          maskedImage={maskedImage}
+          isLoading={isImageLoading} // 传递图片加载状态
+          isImageCleared={isImageCleared} // 传递图片清除状态
+        />
       </Grid>
     </Grid>
   );
 };
 
-export default ModelViewer;
+export default MainComponent;

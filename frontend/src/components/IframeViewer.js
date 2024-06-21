@@ -6,7 +6,9 @@ const IframeViewer = ({ iframeSrc, iframeKey, isIframeLoading, onLoad, onLoadSta
     {isIframeLoading && (
       <div className="loading-container">
         <CircularProgress />
-        <Typography>Loading...</Typography>
+        <Typography>加载3D模型中...</Typography>
+        <Typography>因网络问题，加载所用时间可能比预想的要长</Typography>
+        <Typography>预计加载时长在 5~10 秒</Typography>
       </div>
     )}
     <iframe
