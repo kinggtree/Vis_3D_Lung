@@ -13,11 +13,15 @@ function App() {
     setModalIsOpen(false);
   };
 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
 
   return (
     <div className="App">
       <WelcomeModal isOpen={modalIsOpen} onRequestClose={closeModal} />
-      <MainComponent />
+      <MainComponent openModal={openModal} />
     </div>
   );
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Grid, AppBar, Toolbar, Typography } from '@mui/material';
+import { Grid, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import SelectionControls from './SelectionControls';
 import ImageDisplay from './ImageDisplay';
 import IframeViewer from './IframeViewer';
 import './styles.css'; // 引入 CSS 文件
 
-function MainComponent() {
+function MainComponent( {openModal} ) {
   const [grayImage, setGrayImage] = useState('');
   const [maskedImage, setMaskedImage] = useState('');
   const [selectedPersonName, setSelectedPersonName] = useState('');
@@ -30,7 +31,7 @@ function MainComponent() {
     apiGetPersonList();
 
     // 设置初始选项
-    setSelectedPersonName('Select One');
+    setSelectedPersonName('请选择一个病人');
 
     // 设置模型目录的默认值
     const hostname = window.location.hostname;
@@ -182,6 +183,12 @@ function MainComponent() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 CT建模及病灶展示
             </Typography>
+            <IconButton color="inherit" onClick={openModal}>
+              <HelpCenterIcon />
+              <Typography>
+                使用帮助
+              </Typography>
+            </IconButton>
           </Toolbar>
         </AppBar>
       </Grid>
