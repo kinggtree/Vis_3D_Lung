@@ -11,7 +11,7 @@ const ImageDisplay = ({ grayImage, maskedImage, isLoading, isImageCleared }) => 
         </div>
       ) : isImageCleared ? (
         <Typography variant="h6" color="textSecondary">
-          图片已清除，请选择新的病人和层数。
+          图片已清除，请选择新的CT层。
         </Typography>
       ) : (
         <>
